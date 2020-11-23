@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EDQ</string>
+
+    <string name="notification_channel_name_quotes">Quotes</string>
+    <string name="notification_channel_description_quotes">Receive wise quotes from philosophers to get inspired.</string>
+
+    <string name="notification_action_quotes_favorite">Favorite</string>
+
+    <string name="RealismScreen_label_quotes">Quotes</string>
+    <string name="RealismScreen_route_preferences">Preferences</string>
+
+    <string name="Advice_title_empty_favorite_quotes">No favorite quotes yet</string>
+    <string name="Advice_message_empty_favorite_quotes">Quotes are delivered daily through notifications. Those that you mark as favorite
+        will be shown here.</string>
+
+    <string name="preference_category_title_notifications">Notifications</string>
+
+    <string name="RealismPreference_name_allowQuoteNotifications">Send notifications</string>
+    <string name="RealismPreference_name_quoteNotificationTime">Time</string>
+</resources>
