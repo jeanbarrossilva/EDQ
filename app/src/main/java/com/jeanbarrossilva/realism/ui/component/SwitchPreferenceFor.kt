@@ -19,7 +19,7 @@ fun SwitchPreferenceFor(preference: RealismPreference<Boolean>, editsOnCheckedCh
         val (isActivated, setActivated) = remember { mutableStateOf(preference.value()) }
 
         if (editsOnCheckedChange)
-            RealismPreference.setValueOf(preference to isActivated)
+            preference.setValue(isActivated)
 
         RealismTheme.Wrap {
             PreferenceRow {

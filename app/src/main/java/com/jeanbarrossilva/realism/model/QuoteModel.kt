@@ -23,7 +23,7 @@ object QuoteModel {
             authors.forEach { author ->
                 service.getQuotesFrom(author).execute().body()?.quotes?.forEach {
                     QuoteRepository.add(it)
-                    RealismPreference.setValue(context, true to didFetchQuotes)
+                    didFetchQuotes.setValue(context, true)
                     Log.d("QuoteModel.fetch", "Fetched $it.")
                 }
             }

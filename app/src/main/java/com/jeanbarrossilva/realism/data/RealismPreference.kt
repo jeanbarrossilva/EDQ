@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.edit
 import com.jeanbarrossilva.realism.extension.ContextX.preferences
 import com.jeanbarrossilva.realism.R
-import com.jeanbarrossilva.realism.extension.SharedPreferencesEditorX.add
+import com.jeanbarrossilva.realism.extension.SharedPreferencesEditorX.put
 import java.time.LocalTime
 
 @Suppress("UNCHECKED_CAST")
@@ -25,6 +25,18 @@ class RealismPreference<T>(
     /** Gets the value from [context]'s [android.content.SharedPreferences]. **/
     fun value() = preferences.all[key] as T
 
+    fun setValue(context: Context, value: T) = context.preferences.edit(commit = true) { put(key, value) }
+
+    @Composable
+    fun setValue(value: T) {
+        setValue(ContextAmbient.current, value)
+
+        with(onChangeListeners) {
+            forEach { (key, function) -> if (key == this@RealismPreference.key) function(value) }
+            lastOrNull { (key, _) -> key == key }?.let { (key, _) -> Log.d("RealismPreference.setValueOf", "$key changed to $value.") }
+        }
+    }
+
     @Composable
     fun onChange(block: @Composable (T) -> Unit) {
         block(value())
@@ -35,29 +47,13 @@ class RealismPreference<T>(
 
     init {
         if (!doesSharedPreferenceExist) {
-            preferences.edit { add(defaultValue to key) }
+            preferences.edit { put(key, defaultValue) }
             Log.d("RealismPreference", "Tried to access nonexistent $key SharedPreference. It has been added with the value of ${value()}.")
         }
     }
 
     companion object {
         private val onChangeListeners = mutableListOf<Pair<String, @Composable (Any?) -> Unit>>()
-
-        @Composable
-        fun <T> setValueOf(valueSet: Pair<RealismPreference<T>, T>) {
-            val (preference, value) = valueSet
-            setValue(ContextAmbient.current, value to preference)
-
-            with(onChangeListeners) {
-                forEach { (key, function) -> if (key == preference.key) function(value) }
-                lastOrNull { (key, _) -> key == key }?.let { (key, _) -> Log.d("RealismPreference.setValueOf", "$key changed to $value.") }
-            }
-        }
-
-        fun <T> setValue(context: Context, valueSet: Pair<T, RealismPreference<T>>) {
-            val (value, preference) = valueSet
-            context.preferences.edit(commit = true) { add(value to preference.key) }
-        }
 
         @Composable
         fun allowQuoteNotifications() = RealismPreference(
