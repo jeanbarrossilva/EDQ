@@ -32,7 +32,7 @@ fun TimePreferenceFor(preference: RealismPreference<String>, dependency: Realism
     val (opacity, setOpacity) = remember { mutableStateOf(if (preference.isAvailable()) 1f else 0f) }
     val (time, setTime) = remember { mutableStateOf(preference.value().toLocalTime()) }
 
-    preference.setValue("${time?.hour?.withDoubleDigit}:${time?.minute?.withDoubleDigit}")
+    preference.setValue("${time.hour.withDoubleDigit}:${time.minute.withDoubleDigit}")
 
     RealismTheme.Wrap {
         PreferenceRow(
@@ -57,7 +57,7 @@ fun TimePreferenceFor(preference: RealismPreference<String>, dependency: Realism
 
             Row(horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.End)) {
                 Text(
-                    "${time?.hour?.withDoubleDigit}:${time?.minute?.withDoubleDigit}",
+                    "${time.hour.withDoubleDigit}:${time.minute.withDoubleDigit}",
                     Modifier.fillMaxWidth(),
                     textAlign = TextAlign.End
                 )

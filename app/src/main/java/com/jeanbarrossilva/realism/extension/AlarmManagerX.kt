@@ -14,16 +14,14 @@ import java.util.Calendar.MINUTE
 import kotlin.reflect.KClass
 
 object AlarmManagerX {
-    fun AlarmManager.broadcast(context: Context, receiver: KClass<out BroadcastReceiver>, interval: Long, time: LocalTime?) {
-        time?.let {
-            val calendar = Calendar.getInstance().apply {
-                set(HOUR_OF_DAY, it.hour)
-                set(MINUTE, it.minute)
-            }
-
-            Intent(context, receiver.java)
-                .let { intent -> PendingIntent.getBroadcast(context, 0, intent, FLAG_UPDATE_CURRENT) }
-                .let { pendingIntent -> setInexactRepeating(RTC, calendar.timeInMillis, interval, pendingIntent) }
+    fun AlarmManager.broadcast(context: Context, receiver: KClass<out BroadcastReceiver>, interval: Long, time: LocalTime) {
+        val calendar = Calendar.getInstance().apply {
+            set(HOUR_OF_DAY, time.hour)
+            set(MINUTE, time.minute)
         }
+
+        Intent(context, receiver.java)
+            .let { intent -> PendingIntent.getBroadcast(context, 0, intent, FLAG_UPDATE_CURRENT) }
+            .let { pendingIntent -> setInexactRepeating(RTC, calendar.timeInMillis, interval, pendingIntent) }
     }
 }
