@@ -46,7 +46,7 @@ class RealismPreference<T>(
         @Composable
         fun <T> setValueOf(valueSet: Pair<RealismPreference<T>, T>) {
             val (preference, value) = valueSet
-            setValue(ContextAmbient.current, valueSet)
+            setValue(ContextAmbient.current, value to preference)
 
             with(onChangeListeners) {
                 forEach { (key, function) -> if (key == preference.key) function(value) }
@@ -54,8 +54,8 @@ class RealismPreference<T>(
             }
         }
 
-        fun <T> setValue(context: Context, valueSet: Pair<RealismPreference<T>, T?>) {
-            val (preference, value) = valueSet
+        fun <T> setValue(context: Context, valueSet: Pair<T, RealismPreference<T>>) {
+            val (value, preference) = valueSet
             context.preferences.edit(commit = true) { add(value to preference.key) }
         }
 

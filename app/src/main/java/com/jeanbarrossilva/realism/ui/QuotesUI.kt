@@ -5,11 +5,13 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.stringResource
 import androidx.ui.tooling.preview.Preview
 import com.jeanbarrossilva.realism.ui.default.RealismTheme
 import com.jeanbarrossilva.realism.R
 import com.jeanbarrossilva.realism.data.Quote
+import com.jeanbarrossilva.realism.model.QuoteModel
 import com.jeanbarrossilva.realism.repository.QuoteRepository
 import com.jeanbarrossilva.realism.ui.component.LazyColumnOrHintFor
 import com.jeanbarrossilva.realism.ui.component.QuoteCardFor
@@ -30,4 +32,6 @@ fun QuotesUI() {
             QuoteCardFor(quote)
         }
     }
+
+    QuoteModel.fetch(ContextAmbient.current)
 }

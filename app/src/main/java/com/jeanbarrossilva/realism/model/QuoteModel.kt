@@ -11,12 +11,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object QuoteModel {
     private val gsonConverterFactory = GsonConverterFactory.create()
-    private val retrofit = Retrofit.Builder().addConverterFactory(gsonConverterFactory).baseUrl("https://staging.quotable.io").build()
+    private val retrofit = Retrofit.Builder().addConverterFactory(gsonConverterFactory).baseUrl(QuotableService.url).build()
     private val service = retrofit.create(QuotableService::class.java)
 
     private val authors = listOf("Aristotle", "Epictetus", "Marcus Aurelius", "Plato", "Socrates")
 
     fun fetch(context: Context) {
         val didFetchQuotes = RealismPreference(context, key = "didFetchQuotes", defaultValue = false)
+
+        if (context.connectivityManager.isDefaultNetworkActive && (!didFetchQuotes.value() || QuoteRepository.quotes().isEmpty()))
+            authors.forEach { author ->
+                service.getQuotesFrom(author).execute().body()?.quotes?.forEach {
+                    QuoteRepository.add(it)
+                    RealismPreference.setValue(context, true to didFetchQuotes)
+                    Log.d("QuoteModel.fetch", "Fetched $it.")
+                }
+            }
     }
 }

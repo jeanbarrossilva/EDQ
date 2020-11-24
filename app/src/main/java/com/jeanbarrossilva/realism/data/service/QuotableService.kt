@@ -10,6 +10,6 @@ interface QuotableService {
     fun getQuotesFrom(@Query("author") author: String): Call<QuotableQuoteResults>
 
     companion object {
-        const val URL = "https://api.quotable.io"
+        const val url = "https://staging.quotable.io"
     }
 }
