@@ -31,7 +31,7 @@ class MainViewModel(private val activity: MainActivity) : ViewModel() {
             .let { channel ->
                 RealismPreference.allowQuoteNotifications().onChange { isActivated ->
                     with(activity.notificationManager) {
-                        if (isActivated == true) createNotificationChannel(channel) else deleteNotificationChannel(channel.id)
+                        if (isActivated) createNotificationChannel(channel) else deleteNotificationChannel(channel.id)
                     }
                 }
             }
@@ -41,7 +41,7 @@ class MainViewModel(private val activity: MainActivity) : ViewModel() {
                 activity,
                 receiver = QuoteNotificationBroadcastReceiver::class,
                 INTERVAL_DAY,
-                time = RealismPreference.quoteNotificationTime().value()?.toLocalTime()
+                time = RealismPreference.quoteNotificationTime().value().toLocalTime()
             )
         }
     }

@@ -23,15 +23,15 @@ class RealismPreference<T>(
     private val doesSharedPreferenceExist = preferences.contains(key)
 
     /** Gets the value from [context]'s [android.content.SharedPreferences]. **/
-    fun value(): T? = preferences.all[key] as T?
+    fun value() = preferences.all[key] as T
 
     @Composable
-    fun onChange(block: @Composable (T?) -> Unit) {
+    fun onChange(block: @Composable (T) -> Unit) {
         block(value())
         onChangeListeners.add(key to block as @Composable (Any?) -> Unit)
     }
 
-    fun isAvailable() = dependency?.let { it.value() == true } ?: true
+    fun isAvailable() = dependency?.value() ?: true
 
     init {
         if (!doesSharedPreferenceExist) {
@@ -44,7 +44,7 @@ class RealismPreference<T>(
         private val onChangeListeners = mutableListOf<Pair<String, @Composable (Any?) -> Unit>>()
 
         @Composable
-        fun <T> setValueOf(valueSet: Pair<RealismPreference<T>, T?>) {
+        fun <T> setValueOf(valueSet: Pair<RealismPreference<T>, T>) {
             val (preference, value) = valueSet
             setValue(ContextAmbient.current, valueSet)
 

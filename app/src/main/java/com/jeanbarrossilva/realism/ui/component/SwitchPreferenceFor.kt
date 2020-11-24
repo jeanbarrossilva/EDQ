@@ -16,7 +16,7 @@ import com.jeanbarrossilva.realism.ui.default.RealismTheme
 @Composable
 fun SwitchPreferenceFor(preference: RealismPreference<Boolean>, editsOnCheckedChange: Boolean = true, onCheckedChange: ((Boolean) -> Unit)? = null) {
     if (preference.isAvailable()) {
-        val (isActivated, setActivated) = remember { mutableStateOf(preference.value() == true) }
+        val (isActivated, setActivated) = remember { mutableStateOf(preference.value()) }
 
         if (editsOnCheckedChange)
             RealismPreference.setValueOf(preference to isActivated)
