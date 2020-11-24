@@ -28,7 +28,7 @@ object QuoteRepository {
 
     fun update(quote: Quote, block: Quote.() -> Unit) {
         block(quote)
-        database.quoteDao().update(quote)
+        GlobalScope.launch { database.quoteDao().update(quote) }
     }
 
     init {

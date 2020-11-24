@@ -22,6 +22,8 @@ fun QuotesUI() {
     val quotes: List<Quote>? by QuoteRepository.quotes.observeAsState()
     val favoriteQuotes = quotes?.filter { it.isFavorite } ?: emptyList()
 
+    QuoteModel.fetch(ContextAmbient.current)
+
     RealismTheme.OnSurface {
         LazyColumnOrHintFor(
             favoriteQuotes,
@@ -32,6 +34,4 @@ fun QuotesUI() {
             QuoteCardFor(quote)
         }
     }
-
-    QuoteModel.fetch(ContextAmbient.current)
 }
