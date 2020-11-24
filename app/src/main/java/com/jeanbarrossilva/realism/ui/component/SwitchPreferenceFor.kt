@@ -24,7 +24,7 @@ fun SwitchPreferenceFor(preference: RealismPreference<Boolean>, editsOnCheckedCh
         RealismTheme.Wrap {
             PreferenceRow {
                 Text(
-                    preference.name,
+                    preference.name!!,
                     Modifier.fillMaxWidth(fraction = 0.7f)
                 )
 

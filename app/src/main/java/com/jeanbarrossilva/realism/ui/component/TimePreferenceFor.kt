@@ -51,7 +51,7 @@ fun TimePreferenceFor(preference: RealismPreference<String>, dependency: Realism
                 }
         ) {
             Text(
-                preference.name,
+                preference.name!!,
                 Modifier.fillMaxWidth(fraction = 0.5f)
             )
 

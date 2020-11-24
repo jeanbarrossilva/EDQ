@@ -30,5 +30,5 @@ fun MainUI(activity: MainActivity) {
         }
     }
 
-    activity.viewModel.configNotificationChannel()
+    activity.viewModel.configNotifications()
 }

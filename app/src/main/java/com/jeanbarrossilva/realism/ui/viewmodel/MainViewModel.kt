@@ -1,5 +1,6 @@
 package com.jeanbarrossilva.realism.ui.viewmodel
 
+import android.app.AlarmManager.INTERVAL_DAY
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.graphics.Color
@@ -12,7 +13,7 @@ import com.jeanbarrossilva.realism.extension.ContextX.alarmManager
 import com.jeanbarrossilva.realism.extension.ContextX.notificationManager
 import com.jeanbarrossilva.realism.extension.StringX.toLocalTime
 import com.jeanbarrossilva.realism.data.RealismPreference
-import com.jeanbarrossilva.realism.extension.AlarmManagerX.broadcastDaily
+import com.jeanbarrossilva.realism.extension.AlarmManagerX.broadcast
 
 class MainViewModel(private val activity: MainActivity) : ViewModel() {
     fun configAppearance() {
@@ -21,19 +22,25 @@ class MainViewModel(private val activity: MainActivity) : ViewModel() {
     }
 
     @Composable
-    fun configNotificationChannel() {
+    fun configNotifications() {
         val (name, description) =
             activity.getString(R.string.notification_channel_name_quotes) to activity.getString(R.string.notification_channel_description_quotes)
 
-        if (RealismPreference.allowQuoteNotifications().value() == true)
-            NotificationChannel(NOTIFICATION_CHANNEL_ID_QUOTES, name, NotificationManager.IMPORTANCE_DEFAULT)
-                .apply { this.description = description }
-                .let { activity.notificationManager?.createNotificationChannel(it) }
+        NotificationChannel(NOTIFICATION_CHANNEL_ID_QUOTES, name, NotificationManager.IMPORTANCE_MIN)
+            .apply { this.description = description }
+            .let { channel ->
+                RealismPreference.allowQuoteNotifications().onChange { isActivated ->
+                    with(activity.notificationManager) {
+                        if (isActivated == true) createNotificationChannel(channel) else deleteNotificationChannel(channel.id)
+                    }
+                }
+            }
 
         RealismPreference.quoteNotificationTime().onChange {
-            activity.alarmManager?.broadcastDaily(
+            activity.alarmManager.broadcast(
                 activity,
                 receiver = QuoteNotificationBroadcastReceiver::class,
+                INTERVAL_DAY,
                 time = RealismPreference.quoteNotificationTime().value()?.toLocalTime()
             )
         }

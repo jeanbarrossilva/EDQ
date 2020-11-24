@@ -12,11 +12,11 @@ import com.jeanbarrossilva.realism.extension.SharedPreferencesEditorX.add
 import java.time.LocalTime
 
 @Suppress("UNCHECKED_CAST")
-class RealismPreference<T> private constructor(
+class RealismPreference<T>(
     private val context: Context,
     val key: String,
     val defaultValue: T,
-    val name: String,
+    val name: String? = null,
     val dependency: RealismPreference<Boolean>? = null
 ) {
     private val preferences = context.preferences
@@ -46,15 +46,17 @@ class RealismPreference<T> private constructor(
         @Composable
         fun <T> setValueOf(valueSet: Pair<RealismPreference<T>, T?>) {
             val (preference, value) = valueSet
-
-            ContextAmbient.current.preferences.edit(commit = true) {
-                add(value to preference.key)
-            }
+            setValue(ContextAmbient.current, valueSet)
 
             with(onChangeListeners) {
                 forEach { (key, function) -> if (key == preference.key) function(value) }
                 lastOrNull { (key, _) -> key == key }?.let { (key, _) -> Log.d("RealismPreference.setValueOf", "$key changed to $value.") }
             }
+        }
+
+        fun <T> setValue(context: Context, valueSet: Pair<RealismPreference<T>, T?>) {
+            val (preference, value) = valueSet
+            context.preferences.edit(commit = true) { add(value to preference.key) }
         }
 
         @Composable
@@ -69,7 +71,7 @@ class RealismPreference<T> private constructor(
         fun quoteNotificationTime() = RealismPreference(
             ContextAmbient.current,
             key = "quoteNotificationTime",
-            defaultValue = LocalTime.of(0, 0).toString(),
+            defaultValue = LocalTime.of(9, 0).toString(),
             name = stringResource(R.string.RealismPreference_name_quoteNotificationTime),
             dependency = allowQuoteNotifications()
         )

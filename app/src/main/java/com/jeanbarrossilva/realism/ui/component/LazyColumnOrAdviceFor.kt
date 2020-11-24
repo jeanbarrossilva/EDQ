@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.sp
 import com.jeanbarrossilva.realism.ui.default.RealismTheme
 
 @Composable
-fun <T> LazyColumnOrAdviceFor(
+fun <T> LazyColumnOrHintFor(
     items: List<T>,
     modifier: Modifier = Modifier,
     icon: VectorAsset,
     title: String,
     description: String,
-    content: ((T) -> Unit)? = null
+    content: @Composable ((T) -> Unit)? = null
 ) {
     RealismTheme.Wrap {
         if (items.isEmpty())

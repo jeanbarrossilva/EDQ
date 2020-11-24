@@ -1,21 +1,20 @@
 package com.jeanbarrossilva.realism.data
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-import java.util.*
 
+@Entity(tableName = "quotes")
 data class Quote(
-    @SerializedName("_id") val id: String = UUID.randomUUID().toString(),
-    @SerializedName("content") val content: String,
-    @SerializedName("author") val author: String
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0L,
+    @ColumnInfo(name = "content") @SerializedName("content") val content: String,
+    @ColumnInfo(name = "author") @SerializedName("author") val author: String,
+    @ColumnInfo(name = "read") var isRead: Boolean = false,
+    @ColumnInfo(name = "favorite") var isFavorite: Boolean = false
 ) : Serializable {
-    val numberId =
-        if (id.length == 36) UUID.fromString(id).mostSignificantBits.toInt() else id.map { it.toInt() }.joinToString(separator = "").toInt()
-
-    var isRead = false
-    var isFavorite = false
-
     companion object {
-        fun mine(content: String) = Quote(content = content, author = "Jean Silva")
+        fun default(content: String) = Quote(content = content, author = "Jean Silva")
     }
 }
